@@ -1,0 +1,53 @@
+﻿.register{
+     padding-top:45px;
+    padding-bottom:45px;
+    background:orange;
+}
+#ngay-sinh{
+    list-style:none;
+}
+#ngay-sinh li{
+    display:inline;
+}
+#register-form h5{
+    text-align:center;
+    padding-top:20px;
+}
+#register-form{
+    background:yellow;
+    width:700px;
+    margin:auto;
+}
+.col-6{
+    margin-top:20px;
+    padding-top:10px;
+    padding-bottom:10px;
+    text-align:center;
+}
+#email,#ho,#ten,#password,#repassword{
+    outline:none;
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    width:200px;
+}
+#ngaysinh{
+     outline:none;
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    width:150px;
+}
+#btn-create{
+    text-align:center;
+    padding-top:5px;
+    padding-bottom:5px;
+    width:200px;
+    border-radius:2px;
+    border:none;
+    outline:none;
+    background:orange;
+    color:white;
+    font-weight:bold;
+    margin-bottom:20px;
+}

@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    var db = new WebApplication23.DAO.HomeDAO();
+}
+<div class="breadcrumb">
+    <div class="container">
+        <a class="breadcrumb-item" href="index.html">Home</a>
+        <span class="breadcrumb-item active">Products</span>
+    </div>
+</div>
+<section class="static about-sec">
+   
+    <div class="container">
+    @if (Session["KM"] == null)
+    {
+
+        <h2>highly recommendes books</h2>
+        <div class="recomended-sec">
+            <div class="row">
+                @{
+                    foreach (var item in db.GetListTop4NoiBat())
+                    {
+                        <div class="col-lg-3 col-md-6">
+                            <div class="item">
+                                <img style="width: 225px;height: 250px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@item.AnhBia" alt="img">
+                                <h3>@item.Ten</h3>
+                                <h6><span class="price">@item.Gia VNĐ</span> / <a href="#">Buy Now</a></h6>
+                               @if (@item.IdKhuyenMai != 8 && item.KhuyenMai.NgayKT >= DateTime.Today && item.KhuyenMai.NgayBD <= DateTime.Today)
+                               {
+                                <span class="sale">Sale !</span>
+                               }
+                                <div class="hover">
+                                    <a href="/ChiTietSach/Index/@item.ID">
+                                        <span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                
+            </div>
+        </div>}
+            else
+            {
+                var km = Session["KM"] as WebApplication23.Models.KhuyenMai;
+                        <h2>Chương Trình Khuyến Mãi</h2>
+        <section class="about-sec">
+            <div class="about-img">
+                <img style="margin-top:50px; width: 453px;height: 300px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@km.HinhKhuyenMai"/>
+                @*<figure style="background:url(./UploadedFiles/@km.HinhKhuyenMai)no-repeat;"></figure>*@
+            </div>
+            <div class="about-content">
+                <h2>@km.TenKhuyenMai</h2>
+                <p>
+                    Ngày Bắt Đầu: @km.NgayBD.ToShortDateString()
+                </p>
+                <p>
+                    Ngày Kết Thúc: @km.NgayKT.ToShortDateString()
+                </p>
+                <p>
+                    Khuyến Mãi: @km.PhanTram%
+                </p>
+                @*<div class="btn-sec">
+                    <a href="shop.html" class="btn yellow">shop books</a>
+                    <a href="login.html" class="btn black">subscriptions</a>
+                </div>*@
+            </div>
+        </section>
+    }
+
+        @{ 
+            string title = Session["Title"] as string;
+            var list = Session["Products"] as List<WebApplication23.Models.Sach>;
+        }
+        <h2>@title</h2>
+        <div class="recomended-sec">
+            <div class="row">
+                @{
+                    foreach (var item in list)
+                    {
+                        <div class="col-md-3">
+                            <div class="item">
+                                <img style="width: 170px;height: 210px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@item.AnhBia" alt="img">
+                                <h3><a href="/ChiTietSach/Index/@item.ID">@item.Ten</a></h3>
+                                @if (@item.IdKhuyenMai != 8 && item.KhuyenMai.NgayKT >= DateTime.Today && item.KhuyenMai.NgayBD <= DateTime.Today)
+                                {
+                                    <span  class="sale">Sale !</span>
+                                }
+                                <h6><span class="price">@item.Gia VNĐ</span> / <a href="#">Buy Now</a></h6>
+                            </div>
+                        </div>
+                    }
+                }
+               
+            </div>
+        </div>
+    </div>
+</section>
+

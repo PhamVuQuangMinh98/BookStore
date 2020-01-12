@@ -1,0 +1,807 @@
+﻿
+@model WebApplication23.Models.Sach
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var chuDeDB = new WebApplication23.DAO.ChuDeDAO();
+    var NCCDB = new WebApplication23.DAO.NhaCungCapDAO();
+    var TGDB = new WebApplication23.DAO.TacGiaDAO();
+    var NXBDB = new WebApplication23.DAO.NhaXuatBanDAO();
+    var KMDB = new WebApplication23.DAO.KhuyenMaiDAO();
+
+
+}
+
+<html>
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+        });
+    </script>
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+
+    <title></title>
+</head>
+<body>
+    @{
+
+    }
+
+    <div class="container-fluid thongtin">
+        <div class="row">
+            <h3 style="margin-left:10px;">Admin/Sách</h3>
+        </div>
+        @if (Session["UpdateSach"] == null) {
+    <form method="post" enctype="multipart/form-data" action="./Index" class="info-form">
+        <div class="row">
+            <div class="col-6">
+
+                <div class="info row">
+                    <div class="col-3">
+                        Tên sách
+                    </div>
+                    <div class="col-6 ">
+                        @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                        @Html.TextBoxFor(model => model.Ten, new { name = "email", required = "required", @placeholder = "*Nhập tên sách", @id = "email" })
+                    </div>
+                    <div class="col-3">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("TK")
+                        </p>
+                    </div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Giá sách
+                    </div>
+                    <div class="col-6">
+                        @*<input type="text" placeholder="*Họ" required id="ho" name="ho" />*@
+                        @Html.TextBoxFor(model => model.Gia, new { name = "ho", @type = "number", required = "required", @placeholder = "*Nhập giá sách", @id = "ho" })
+                    </div>
+                    <div class="col-3">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("Gia")
+                        </p>
+                    </div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Số lượng
+                    </div>
+                    <div class="col-6">
+                        @*<input type="text" placeholder="*Tên" required id="ten"  />*@
+                        @Html.TextBoxFor(model => model.SoLuong, new { name = "ten", @type = "number", required = "required", @placeholder = "*Nhập số lượng", @id = "ten" })
+                    </div>
+                    <div class="col-3">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("SL")
+                        </p>
+                    </div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Ảnh bìa
+                    </div>
+                    <div class="col-6">
+                        @*<input type="date" required name="ngaysinh" id="ngaysinh"/>*@
+                        <input type="file" name="anhBia" />
+                    </div>
+                    <div class="col-3">
+                        <p style="color:red;text-align:center;">
+                        </p>
+                    </div>
+                </div> 
+                <div class="info row">
+                    <div class="col-3">
+                        Ngày xuất bản
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBoxFor(model => model.NamXuatBan, new { @type = "date", @id = "ngaysinh", required = "required"})
+                    </div>
+                    <div class="col-3"></div>
+                </div>              
+                <div class="info row">
+                    <div class="col-3">
+                        Chủ đề
+                    </div>
+                    <div class="col-6">
+                        <select name="chude">
+                            @{
+                                foreach (var item in chuDeDB.GetList())
+                                {
+                                    <option value="@item.IdChuDe">@item.Ten</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Nhà cung cấp
+                    </div>
+                    <div class="col-6">
+                        <select name="ncc">
+                            @{
+                                foreach (var item in NCCDB.GetList())
+                                {
+                                    <option value="@item.IdNCC">@item.Ten</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Tác giả
+                    </div>
+                    <div class="col-6">
+                        <select name="tg">
+                            @{
+                                foreach (var item in TGDB.GetList())
+                                {
+                                    <option value="@item.IdTacGia">@item.Ten</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Nhà xuất bản
+                    </div>
+                    <div class="col-6">
+                        <select name="nxb">
+                            @{
+                                foreach (var item in NXBDB.GetList())
+                                {
+                                    <option value="@item.IdNXB">@item.Ten</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-3">
+                        Khuyến mãi
+                    </div>
+                    <div class="col-6">
+                        <select name="km">
+                            @{
+                                <option value="1">--Trống</option>
+                                foreach (var item in KMDB.GetList())
+                                {
+                                    <option value="@item.IdKhuyenMai">@item.TenKhuyenMai</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="info">
+                    <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Thêm mới</button>
+                    <button style="width:120px;" class="btn btn-warning" disabled id="btn-update">Sửa đổi</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="info row">
+                    <div class="col-2">
+                        Ảnh 1
+                    </div>
+                    <div class="col-6">
+                        <input type="file" name="anh1" />
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Ảnh 2
+                    </div>
+                    <div class="col-6">
+                        <input type="file" name="anh2" />
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Trọng lượng
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBoxFor(model => model.TrongLuong, new { @type = "number", @placeholder = "*Nhập trọng lượng", @id = "ngaysinh" })
+                    </div>
+                    <div class="col-4">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("TL")
+                        </p>
+                    </div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Số trang
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBoxFor(model => model.SoTrang, new { @type = "number", @placeholder = "*Nhập số trang", @id = "ngaysinh" })
+                    </div>
+                    <div class="col-4">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("Trang")
+                        </p>
+                    </div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Hình thức
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBoxFor(model => model.HinhThuc, new { @placeholder = "*Nhập hình thức", @id = "ngaysinh" })
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Mô tả
+                    </div>
+                    <div class="col-6">
+                        @Html.TextAreaFor(m => m.MoTa, new { @rows = "5", @cols = "50", @placeholder = "*Nhập mô tả" }))
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Ngôn ngữ
+                    </div>
+                    <div class="col-6">
+                        <span>@Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Anh", new { @checked = "checked" }) Tiếng Anh &nbsp; @Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Việt") Tiếng Việt</span>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="info row">
+                    <div class="col-2">
+                        Kích thước
+                    </div>
+                    <div class="col-6">
+                        <span><input type="number" name="chieuDai" style="width:50px;" />&nbsp;<input type="number" name="chieuRong" style="width:50px;" />&nbsp;<input type="number" name="chieuSau" style="width:50px;" /> </span>
+                    </div>
+                    <div class="col-4">
+                        <p style="color:red;text-align:center;">
+                            @Html.ValidationMessage("DRS")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+                                }
+                                else
+                                {
+                                    var sach = Session["UpdateSach"] as WebApplication23.Models.Sach;
+                                    <form method="post" enctype="multipart/form-data" action="./Index" class="info-form">
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Tên sách
+                                                    </div>
+                                                    <div class="col-6 ">
+                                                        @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                                                        @Html.TextBoxFor(model => model.Ten, new {@Value=sach.Ten ,name = "email", required = "required", @placeholder = "*Nhập tên sách", @id = "email" })
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <p style="color:red;text-align:center;">
+                                                            @Html.ValidationMessage("TK")
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Giá sách
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @*<input type="text" placeholder="*Họ" required id="ho" name="ho" />*@
+                                                        @Html.TextBoxFor(model => model.Gia, new {@Value=sach.Gia, name = "ho", @type = "number", required = "required", @placeholder = "*Nhập giá sách", @id = "ho" })
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Số lượng
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @*<input type="text" placeholder="*Tên" required id="ten"  />*@
+                                                        @Html.TextBoxFor(model => model.SoLuong, new {@Value=sach.SoLuong, name = "ten", @type = "number", required = "required", @placeholder = "*Nhập số lượng", @id = "ten" })
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Ảnh bìa
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @*<input type="date" required name="ngaysinh" id="ngaysinh"/>*@
+                                                        <input type="file" name="anhBia" value="@sach.AnhBia" />
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <p style="color:red;text-align:center;">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Ngày xuất bản
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @{
+                                                            string dateValue = sach.NamXuatBan.Year + "-" + sach.NamXuatBan.Month + "-" + sach.NamXuatBan.Day;
+                                                            if (sach.NamXuatBan.Month < 10 && sach.NamXuatBan.Day >= 10)
+                                                            {
+                                                                dateValue = sach.NamXuatBan.Year + "-0" + sach.NamXuatBan.Month + "-" + sach.NamXuatBan.Day;
+
+                                                            }
+                                                            else if (sach.NamXuatBan.Day < 10 && sach.NamXuatBan.Month >= 10)
+                                                            {
+                                                                dateValue = sach.NamXuatBan.Year + "-" + sach.NamXuatBan.Month + "-0" + sach.NamXuatBan.Day;
+                                                            }
+                                                            else if (sach.NamXuatBan.Month < 10 && sach.NamXuatBan.Day < 10)
+                                                            {
+                                                                dateValue = sach.NamXuatBan.Year + "-0" + sach.NamXuatBan.Month + "-0" + sach.NamXuatBan.Day;
+                                                            }
+                                                        }
+                                                        @Html.TextBoxFor(model => model.NamXuatBan, new {@Value=dateValue, @type = "date", @id = "ngaysinh", required = "required" })
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Chủ đề
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="chude">
+                                                            @{
+                                                                
+                                                                foreach (var item in chuDeDB.GetList())
+                                                                {
+                                                                    if (item.IdChuDe == sach.IdChuDe)
+                                                                    {
+                                                                        <option value="@item.IdChuDe" selected>@item.Ten</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.IdChuDe">@item.Ten</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Nhà cung cấp
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="ncc">
+                                                            @{
+                                                                
+                                                                foreach (var item in NCCDB.GetList())
+                                                                {
+                                                                    if (item.IdNCC == sach.IdNCC)
+                                                                    {
+                                                                        <option selected value="@item.IdNCC">@item.Ten</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.IdNCC">@item.Ten</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Tác giả
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="tg">
+                                                            @{
+                                                                
+                                                                foreach (var item in TGDB.GetList())
+                                                                {
+                                                                    if (item.IdTacGia == sach.IdTacGia)
+                                                                    {
+                                                                        <option selected value="@item.IdTacGia">@item.Ten</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.IdTacGia">@item.Ten</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Nhà xuất bản
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="nxb">
+                                                            @{
+                                                                
+                                                                foreach (var item in NXBDB.GetList())
+                                                                {
+                                                                    if (item.IdNXB == sach.IdNXB)
+                                                                    {
+                                                                        <option selected value="@item.IdNXB">@item.Ten</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <option value="@item.IdNXB">@item.Ten</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-3">
+                                                        Khuyến mãi
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="km">
+                                                            @{
+                                                                
+
+                                                                if(sach.IdKhuyenMai == 8)
+                                                                {
+                                                                    <option selected value = "8" >--Trống</option>
+                                                                foreach (var item in KMDB.GetList())
+                                                                    {
+                                                                    <option value = "@item.IdKhuyenMai" >@item.TenKhuyenMai</option>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="8">--Trống</option>
+                                                                    foreach (var item in KMDB.GetList())
+                                                                    {
+                                                                        if (item.IdKhuyenMai == sach.IdKhuyenMai)
+                                                                        {
+                                                                            <option value="@item.IdKhuyenMai" selected>@item.TenKhuyenMai</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                        <option value="@item.IdKhuyenMai">@item.TenKhuyenMai</option>
+                                                                            }
+                                                                    }
+                                                                }
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3"></div>
+                                                </div>
+                                                <div class="info">
+                                                    <button style="width:120px;" class="btn btn-warning" id="btn-create" disabled>Thêm mới</button>
+                                                    <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-update">Sửa đổi</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Ảnh 1
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="file" name="anh1" value="@sach.Anh1" />
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Ảnh 2
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="file" name="anh2" value="@sach.Anh2"/>
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Trọng lượng
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @Html.TextBoxFor(model => model.TrongLuong, new {@Value=sach.TrongLuong, @type = "number", @placeholder = "*Nhập trọng lượng", @id = "ngaysinh" })
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Số trang
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @Html.TextBoxFor(model => model.SoTrang, new {@Value=sach.SoTrang, @type = "number", @placeholder = "*Nhập số trang", @id = "ngaysinh" })
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Hình thức
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @Html.TextBoxFor(model => model.HinhThuc, new {@Value=sach.HinhThuc, @placeholder = "*Nhập hình thức", @id = "ngaysinh" })
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Mô tả
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <textarea name="mota" rows="5" cols="50">@sach.MoTa</textarea>
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Ngôn ngữ
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @if (sach.NgonNgu == "Tiếng Anh") {
+                                                            <span>@Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Anh", new { @checked = "checked" }) Tiếng Anh &nbsp; @Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Việt") Tiếng Việt</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Anh") Tiếng Anh &nbsp; @Html.RadioButtonFor(m => m.NgonNgu, "Tiếng Việt", new { @checked = "checked" }) Tiếng Việt</span>
+                                                        }
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                                <div class="info row">
+                                                    <div class="col-2">
+                                                        Kích thước
+                                                    </div>
+                                                    <div class="col-6">
+                                                        @{ 
+                                                            string[] chuoi = sach.KickThuoc.Split('x');
+                                                        }
+                                                        <span><input type="number" value="@chuoi[0]" name="chieuDai" style="width:50px;" />&nbsp;<input type="number" value="@chuoi[1]" name="chieuRong" style="width:50px;" />&nbsp;<input value="@chuoi[2]" type="number" name="chieuSau" style="width:50px;" /> </span>
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                                                }
+
+
+        <div class="container-fluid mt-4 ">
+            <form method="post" enctype="multipart/form-data" action="./Search" class="info-form pb-2">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="info row">
+                            <div class="col-3">
+                                Tên sách
+                            </div>
+                            <div class="col-6 ">
+                                <input type="text" placeholder="*Nhập tên sách" id="email" name="name"/>    
+                            </div>
+                            <div class="col-3">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("TK")
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="info row">
+                            <div class="col-3">
+                                Chủ đề
+                            </div>
+                            <div class="col-6">
+                                <select name="chude">
+                                    @{
+                                           <option selected value="0">--Tất cả</option>
+                                        foreach (var item in chuDeDB.GetList())
+                                        {
+                                            <option value="@item.IdChuDe">@item.Ten</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+
+                        <div class="info row">
+                            <div class="col-3">
+                                Nhà cung cấp
+                            </div>
+                            <div class="col-6">
+                                <select name="ncc">
+                                    @{
+                                        <option selected value="0">--Tất cả</option>
+                                        foreach (var item in NCCDB.GetList())
+                                        {
+                                            <option value="@item.IdNCC">@item.Ten</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+                        <button style="width:120px;" class="btn btn-warning" type="submit">Tìm kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "Sach",new {Area="Admin"})'">
+                            Reset
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <div class="info row">
+                            <div class="col-3">
+                                Tác giả
+                            </div>
+                            <div class="col-6">
+                                <select name="tg">
+                                    @{
+                                        <option selected value="0">--Tất cả</option>
+                                        foreach (var item in TGDB.GetList())
+                                        {
+                                            <option value="@item.IdTacGia">@item.Ten</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+
+                        <div class="info row">
+                            <div class="col-3">
+                                Nhà xuất bản
+                            </div>
+                            <div class="col-6">
+                                <select name="nxb">
+                                    @{
+                                        <option selected value="0">--Tất cả</option>
+                                        foreach (var item in NXBDB.GetList())
+                                        {
+                                            <option value="@item.IdNXB">@item.Ten</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+
+                        <div class="info row">
+                            <div class="col-3">
+                                Khuyến mãi
+                            </div>
+                            <div class="col-6">
+                                <select name="km">
+                                    @{
+                                        <option selected value="0">--Tất cả</option>
+                                       <option value="8">--Không có</option>
+                                        foreach (var item in KMDB.GetList())
+                                        {
+                                            <option value="@item.IdKhuyenMai">@item.TenKhuyenMai</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+</div>
+        <div class="container-fluid mt-4 mb-4">
+
+            <table id="example1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Ảnh bìa</th>
+                        <th>Chủ đề</th>
+                        <th>NCC</th>
+                        <th>NXB</th>
+                        <th>Tác giả</th>
+                        <th>Khuyến mãi</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                @{
+                    var db = new WebApplication23.DAO.SachDAO();
+                    var list = Session["ListSach"] as List<WebApplication23.Models.Sach>;
+                    if (list == null)
+                    {
+                        <tbody>
+                            @foreach (var item in db.GetList())
+                            {
+
+                            <tr>
+                                <td>@item.Ten</td>
+                                <td>@item.Gia</td>
+                                <td>@item.SoLuong</td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.AnhBia" alt="image">
+                                </td>
+                                <td>@item.ChuDe.Ten</td>
+                                <td>@item.NhaCungCap.Ten</td>
+                                <td>@item.NhaXuatBan.Ten</td>
+                                <td>@item.TacGia.Ten</td>
+                                @if (@item.KhuyenMai != null)
+                                {
+                                    <td>@item.KhuyenMai.TenKhuyenMai</td>
+                                }
+                                else
+                                {
+                                    <td>Không có</td>
+                                }
+
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "Sach", new { Area = "Admin", idSach = item.ID }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "Sach", new { Area = "Admin", idSach = item.ID }, new { })
+                                </td>
+
+                            </tr>
+
+                            }
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            @foreach (var item in list)
+                            {
+                            <tr>
+                                <td>@item.Ten</td>
+                                <td>@item.Gia</td>
+                                <td>@item.SoLuong</td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.AnhBia" alt="image">
+                                </td>
+                                <td>@item.ChuDe.Ten</td>
+                                <td>@item.NhaCungCap.Ten</td>
+                                <td>@item.NhaXuatBan.Ten</td>
+                                <td>@item.TacGia.Ten</td>
+                                @if (@item.KhuyenMai != null)
+                                {
+                                    <td>@item.KhuyenMai.TenKhuyenMai</td>
+                                }
+                                else
+                                {
+                                    <td>Không có</td>
+                                }
+
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "Sach", new { Area = "Admin", idSach = item.ID }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "Sach", new { Area = "Admin", idSach = item.ID }, new { })
+                                </td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    }
+                }
+            </table>
+        </div>
+        </div>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,380 @@
+﻿@model WebApplication23.Models.KhuyenMai
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<html>
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+        });
+    </script>
+
+
+
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+
+    <title></title>
+</head>
+<body>
+    @{
+
+    }
+    <div class="container-fluid thongtin">
+        <div class="row">
+            <h3 style="margin-left:10px;">Admin/Khuyến Mãi</h3>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                @if (Session["UpdateKM"] == null)
+                {
+                    <form method="post" enctype="multipart/form-data" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên chương trình
+                            </div>
+                            <div class="col-6 ">
+                                @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                                @Html.TextBoxFor(model => model.TenKhuyenMai, new { name = "tenKM", required = "required", @placeholder = "*Nhập tên chương trình KM", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("TK")
+                                </p>
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Hình KM
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Họ" required id="ho" name="ho" />*@
+                                <input type="file" name="file" />
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Tên" required id="ten"  />*@
+                                <select name="phanTram">
+                                    @{
+                                        for (int i = 5; i <= 50; i=i+5)
+                                        {                                            
+                                                <option value="@i">@i%</option>
+                                        }
+                                    }
+                                    
+                                </select>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Ngày bắt đầu
+                            </div>
+                            <div class="col-6">
+                                @*<input type="date" required name="ngaysinh" id="ngaysinh"/>*@
+                                @Html.TextBoxFor(model => model.NgayBD, new { required = "required", name = "ngayBD", @type = "date", @id = "ngaysinh" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("Date1")
+                                </p>
+                            </div>
+                        </div>
+                         <div class="info row">
+                            <div class="col-2">
+                                Ngày kết thúc
+                            </div>
+                            <div class="col-6">
+                                @*<input type="date" required name="ngaysinh" id="ngaysinh"/>*@
+                                @Html.TextBoxFor(model => model.NgayKT, new { required = "required", name = "ngayKT", @type = "date", @id = "ngaysinh" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("Date")
+                                </p>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    var a = Session["UpdateKM"] as WebApplication23.Models.KhuyenMai;
+                    <form method="post" enctype="multipart/form-data" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên chương trình KM
+                            </div>
+                            <div class="col-6 ">
+                                @Html.TextBoxFor(model => model.TenKhuyenMai, new { @Value = a.TenKhuyenMai, required = "required", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Hình KM
+                            </div>
+                            <div class="col-6">
+                                <input type="file" name="file" value="@a.HinhKhuyenMai"/>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Phần trăm KM
+                            </div>
+                            <div class="col-6">
+                                <select name="phanTram">
+                                    @{
+                                        for (int i = 5; i <= 50; i = i + 5)
+                                        {
+                                            if (i == Convert.ToInt32(a.PhanTram))
+                                            {
+                                                <option selected value="@i">@i%</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i">@i%</option>
+                                            }
+                                        }
+                                    }
+
+                                </select>
+
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Ngày bắt đầu
+                            </div>
+                            <div class="col-6">
+                                @{
+                                    string dateValue = a.NgayBD.Year + "-" + a.NgayBD.Month + "-" + a.NgayBD.Day;
+                                    if (a.NgayBD.Month < 10 && a.NgayBD.Day >= 10)
+                                    {
+                                        dateValue = a.NgayBD.Year + "-0" + a.NgayBD.Month + "-" + a.NgayBD.Day;
+
+                                    }
+                                    else if (a.NgayBD.Day < 10 && a.NgayBD.Month >= 10)
+                                    {
+                                        dateValue = a.NgayBD.Year + "-" + a.NgayBD.Month + "-0" + a.NgayBD.Day;
+                                    }
+                                    else if (a.NgayBD.Month < 10 && a.NgayBD.Day < 10)
+                                    {
+                                        dateValue = a.NgayBD.Year + "-0" + a.NgayBD.Month + "-0" + a.NgayBD.Day;
+                                    }
+                                }
+
+                                @Html.TextBoxFor(model => model.NgayBD, new { @Value = dateValue, @type = "date", @id = "ngaysinh", required = "required" })
+
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("Date1")
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="info row">
+                            <div class="col-2">
+                                Ngày kết thúc
+                            </div>
+                            <div class="col-6">
+                                @{
+                                    string dateValue1 = a.NgayKT.Year + "-" + a.NgayKT.Month + "-" + a.NgayKT.Day;
+                                    if (a.NgayKT.Month < 10 && a.NgayKT.Day >= 10)
+                                    {
+                                        dateValue1 = a.NgayKT.Year + "-0" + a.NgayKT.Month + "-" + a.NgayKT.Day;
+
+                                    }
+                                    else if (a.NgayKT.Day < 10 && a.NgayKT.Month >= 10)
+                                    {
+                                        dateValue1 = a.NgayKT.Year + "-" + a.NgayKT.Month + "-0" + a.NgayKT.Day;
+                                    }
+                                    else if (a.NgayKT.Month < 10 && a.NgayKT.Day < 10)
+                                    {
+                                        dateValue1 = a.NgayKT.Year + "-0" + a.NgayKT.Month + "-0" + a.NgayKT.Day;
+                                    }
+                                }
+
+                                @Html.TextBoxFor(model => model.NgayKT, new { @Value = dateValue1, @type = "date", @id = "ngaysinh", required = "required" })
+
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("Date")
+                                </p>
+                            </div>
+                        </div>
+
+                       
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                                    }
+            </div>
+            <div class="col-6">
+                @using (Html.BeginForm("Search", "KhuyenMai", new { area = "Admin" }, FormMethod.Post, new { @class = "info-form", id = "logoutForm" }))
+                {
+                    <div class="info row">
+                        <div class="col-2">
+                            Tên chương trình KM
+                        </div>
+                        <div class="col-6 ">
+                            <input type="text" name="tenKM" id="email" placeholder="*Nhập chương trình KM" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("TK")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Ngày bắt đầu
+                        </div>
+                        <div class="col-6">
+                            <input type="date" name="ngayBD" id="ngaySinh" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("NS")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Ngày kết thúc
+                        </div>
+                        <div class="col-6">
+                            <input type="date" name="ngayKT" id="ngaySinh" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("NS")
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="info">
+                        <button style="width:120px;" class="btn btn-warning" type="submit">Tìm Kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "KhuyenMai",new {Area="Admin"})'">
+                            Reset
+                        </button>
+
+
+                        @*@Html.ActionLink("Reset", "Reset", "KhachHang", new { Area = "Admin" }, new {@id="resetBtn", @type = "button" })*@
+                    </div>}
+             
+            </div>
+        </div>
+        <div class="container-fluid mt-4 mb-4">
+
+            <table id="example1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Mã KM</th>
+                        <th>Tên KM</th>
+                        <th>Hình KM</th>
+                        <th>% KM</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                @{
+                    var db = new WebApplication23.DAO.KhuyenMaiDAO();
+                    var list = Session["ListKM"] as List<WebApplication23.Models.KhuyenMai>;
+
+
+
+
+
+
+                    if (list == null)
+                    {
+                        <tbody>
+                            @foreach (var item in db.GetList())
+                            {
+
+                            <tr>
+                                <td>@item.IdKhuyenMai</td>
+                                <td>@item.TenKhuyenMai</td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.HinhKhuyenMai" alt="image">
+                                </td>
+                                <td>@item.PhanTram</td>
+                                <td>@item.NgayBD</td>
+                                <td>@item.NgayKT</td>
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "KhuyenMai", new { Area = "Admin", idKM = item.IdKhuyenMai }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "KhuyenMai", new { Area = "Admin", idKM = item.IdKhuyenMai }, new { })
+                                </td>
+
+                            </tr>
+
+                            }
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                        @foreach (var item in list)
+                        {
+                            <tr>
+                                <td>@item.IdKhuyenMai</td>
+                                <td>@item.TenKhuyenMai</td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.HinhKhuyenMai" alt="image">
+                                </td>
+                                <td>@item.PhanTram</td>
+                                <td>@item.NgayBD</td>
+                                <td>@item.NgayKT</td>
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "KhuyenMai", new { Area = "Admin", idKM = item.IdKhuyenMai }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "KhuyenMai", new { Area = "Admin", idKM = item.IdKhuyenMai }, new { })
+                                </td>
+
+                            </tr>
+                        }
+                       </tbody>
+                    }
+                }
+
+            </table>
+
+
+
+
+        </div>
+       
+
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+

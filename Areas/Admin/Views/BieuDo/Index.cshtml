@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var db = new WebApplication23.DAO.BieuDoDAO();
+}
+<script src="~/Scripts/Chart.js"></script>
+<style>
+    #chart_container {
+        width: 400px;
+        height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+</style>
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <h3 style="margin-left:10px;">Admin/Biểu Đồ</h3>
+    </div>
+    <div class="row mb-5">
+        <div class="col-6 text-center">
+        <div id="chart_container">
+    <canvas id="chart_SL_Thang" width="400" height="400"></canvas>
+</div>
+        </div>
+        <div class="col-6 text-center"><div id="chart_container">
+    <canvas id="chart_DT_Thang" width="400" height="400"></canvas>
+</div></div>
+    </div>
+    <div class="row">
+        <div class="col-6 text-center">
+            <div id="chart_container">
+                <canvas id="chart_SL_SachNB" width="600" height="400"></canvas>
+            </div>
+        </div>
+        <div class="col-6 text-center">
+            <div id="chart_container">
+                <canvas id="chart_SL_CDNB" width="600" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    //Lay du lieu
+    var month = @Html.Raw(Json.Encode(db.GetListMonth()));
+    var slSach = @Html.Raw(Json.Encode(db.GetListSoLuongTheoThang()));
+    //Chart 1
+    var ctx = document.getElementById('chart_SL_Thang');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: month,
+            datasets: [{
+                label: "Số Lượng Sách Bán Theo Tháng",
+                data: slSach,
+                backgroundColor: ["rgba(242,166,54,.5)", "rgba(145,65,72,.5)", "(74,25,92,.5)"],
+                borderColor:["rgba(242,166,54)","rgba(145,65,72)","rgb(74,25,92)"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    //Chart 2
+    var dt=@Html.Raw(Json.Encode(db.GetDoanhThuTheoThang()));
+    var ctx2 = document.getElementById('chart_DT_Thang');
+    var barChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: month,
+            datasets: [{
+                label: "Doanh Thu Theo Tháng",
+                data: dt,
+                backgroundColor: ["rgba(242,166,54,.5)", "rgba(145,65,72,.5)", "(74,25,92,.5)"],
+                borderColor:["rgba(242,166,54)","rgba(145,65,72)","rgb(74,25,92)"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    //Chart 3
+    var ten=@Html.Raw(Json.Encode(db.GetTenSachNB()));
+    var sl=@Html.Raw(Json.Encode(db.GetSLSachNB()));
+    var ctx2 = document.getElementById('chart_SL_SachNB');
+    var barChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ten,
+            datasets: [{
+                label: "Top 10 Sách Bán Chạy",
+                data: sl,
+                backgroundColor: ["rgba(242,166,54,.5)", "rgba(145,65,72,.5)", "(74,25,92,.5)"],
+                borderColor:["rgba(242,166,54)","rgba(145,65,72)","rgb(74,25,92)"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    //Chart 4
+    var tenCD=@Html.Raw(Json.Encode(db.GetTenCDNB()));
+    var slCD=@Html.Raw(Json.Encode(db.GetSLCDNB()));
+    var ctx2 = document.getElementById('chart_SL_CDNB');
+    var barChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: tenCD,
+            datasets: [{
+                label: "Top 10 Chủ Đề Nổi Bật",
+                data: slCD,
+                backgroundColor: ["rgba(242,166,54,.5)", "rgba(145,65,72,.5)", "(74,25,92,.5)"],
+                borderColor:["rgba(242,166,54)","rgba(145,65,72)","rgb(74,25,92)"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+

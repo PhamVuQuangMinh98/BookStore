@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a class="breadcrumb-item" href="index.html">Lịch Sử Mua Hàng</a>
+        <span class="breadcrumb-item active">Chi Tiết Hóa Đơn</span>
+    </div>
+</div>
+<section class="static about-sec">
+    <div class="container">
+
+        <h4 class="mb-2">Thông Tin Hóa Đơn</h4>
+        @{
+            var hd = Session["HDHome"] as WebApplication23.Models.HoaDon;
+            var cthd = new WebApplication23.DAO.CTHDDAO();
+        }
+        <div style="width:400px" class="row">
+            <div class="col-5">Mã Hóa Đơn</div>
+            <div class="col-6">@hd.IdHoaDon</div>
+        </div>
+        <div style="width:400px" class="row">
+            <div class="col-5">Ngày Tạo</div>
+            <div class="col-6">@hd.NgayTao.ToShortDateString()</div>
+        </div>
+        <div style="width:400px" class="row">
+            <div class="col-5">Tổng Tiền</div>
+            <div class="col-6">@hd.TongTien VNĐ</div>
+        </div>
+        <div style="width:400px" class="row">
+            <div class="col-5">Tên Người Nhận</div>
+            <div class="col-6">@hd.TenNguoiNhan</div>
+        </div>
+        <div style="width:400px" class="row">
+            <div class="col-5">SĐT</div>
+            <div class="col-6">@hd.SDT</div>
+        </div>
+        <div style="width:400px" class="row">
+            <div class="col-5">Địa Chỉ</div>
+            <div class="col-6">@hd.DiaChi</div>
+        </div>
+        <table class="table table-bordered mt-4" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã</th>
+                    <th style="width:130px;" class="text-center">Hình Ảnh</th>
+                    <th class="text-center">Tên Sách</th>
+                    <th class="text-center">Đơn Giá</th>
+                    <th class="text-center">Số Lượng</th>
+                    <th class="text-center">Thành Tiền</th>
+                </tr>
+            </thead>
+            @{
+
+                var list = Session["ListCTHDHome"] as List<WebApplication23.Models.ChiTietHoaDon>;
+
+
+
+
+
+
+                if (list != null)
+                {
+                    foreach (var item in list)
+                    {
+                        <tbody>
+                            <tr>
+                                <td class="text-center">@item.IdCTHD</td>
+                                <td class="text-center">
+                                    <img style="width: 100px;height: 120px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.Sach.AnhBia" />
+                                </td>
+                                <td class="text-center">@item.Sach.Ten</td>
+                                <td class="text-center">@item.Sach.Gia VNĐ</td>
+                                <td class="text-center">@item.SoLuong</td>
+                                <td class="text-center">@item.ThanhTien VNĐ</td>
+                            </tr>
+                        </tbody>
+                    }
+                }
+
+            }
+
+        </table>
+    </div>
+</section>
+

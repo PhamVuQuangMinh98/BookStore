@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+@if (ViewBag.Them != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+        alert("@ViewBag.Them");
+    }
+    </script>
+}
+@if (ViewBag.SL != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+        alert("@ViewBag.SL");
+    }
+    </script>
+}
+<div class="breadcrumb">
+    <div class="container">
+        <a class="breadcrumb-item" href="index.html">Home</a>
+        <span class="breadcrumb-item active">Terms and Condition</span>
+    </div>
+</div>
+<section class="product-sec">
+    @{ 
+            var sach = Session["CTSach"] as WebApplication23.Models.Sach;
+    <div class="container">
+        <h1>@sach.Ten</h1>
+        <div class="row">
+            <div class="col-md-6 slider-sec">
+                <!-- main slider carousel -->
+                <div id="myCarousel" class="carousel slide">
+                    <!-- main slider carousel items -->
+                    <div class="carousel-inner">
+                        <div class="active item carousel-item" data-slide-number="0">
+                            <img style="width: 350px;height: 460px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.AnhBia" class="img-fluid">
+                        </div>
+                        <div class="item carousel-item" data-slide-number="1">
+                            <img style="width: 350px;height: 460px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.Anh1" class="img-fluid">
+                        </div>
+                        <div class="item carousel-item" data-slide-number="2">
+                            <img style="width: 350px;height: 460px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.Anh2" class="img-fluid">
+                        </div>
+                    </div>
+                    <!-- main slider carousel nav controls -->
+                    <ul class="carousel-indicators list-inline">
+                        <li class="list-inline-item active">
+                            <a id="carousel-selector-0" class="selected" data-slide-to="0" data-target="#myCarousel">
+                                <img style="width: 115px;height: 145px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.AnhBia" class="img-fluid">
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a id="carousel-selector-1" data-slide-to="1" data-target="#myCarousel">
+                                <img style="width: 115px;height: 145px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.Anh1" class="img-fluid">
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a id="carousel-selector-2" data-slide-to="2" data-target="#myCarousel">
+                                <img style="width: 115px;height: 145px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@sach.Anh2" class="img-fluid">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/main slider carousel-->
+            </div>
+            <div class="col-md-6 slider-content">
+                <p>Mô Tả</p>
+                <textarea readonly rows="4" cols="80">
+                    @sach.MoTa
+                </textarea>                   
+                <ul>
+             
+                    @if (sach.IdKhuyenMai != 8 && sach.KhuyenMai.NgayKT>=DateTime.Today && sach.KhuyenMai.NgayBD <= DateTime.Today)
+                    {
+                        <li>
+                            <span class="name">Giá:</span><span class="clm">:</span>
+                            <span class="price">@sach.Gia VNĐ</span>
+                        </li>
+
+                        double phantram = sach.KhuyenMai.PhanTram / 100;
+                        double tienKhuyenMai = sach.Gia - (sach.Gia * phantram);
+                        double tienTK = sach.Gia - tienKhuyenMai;
+
+                        <li>
+                            <span class="name">Giá Khuyến Mãi</span><span class="clm">:</span>
+                            <span class="price final">@Math.Round(tienKhuyenMai,MidpointRounding.ToEven) VNĐ</span>
+                        </li>
+                        <li><span class="save-cost">Save @Math.Round(tienTK, MidpointRounding.ToEven) VNĐ (@sach.KhuyenMai.PhanTram%)</span></li>
+                    }
+                    else
+                    {
+                        <li>
+                            <span class="name">Giá:</span><span class="clm">:</span>
+                            <span class="price final">@sach.Gia VNĐ</span>
+                        </li>
+                    }
+                    @if (sach.SoLuong > 0)
+                    {
+                        <li>
+                            <span class="name">Tình Trạng</span><span class="clm">:</span>
+                            <span class="price final">Còn hàng</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <span class="name">Tình Trạng</span><span class="clm">:</span>
+                            <span class="price final">Hết hàng</span>
+                        </li>
+                    }
+                </ul>
+                @if (sach.SoLuong > 0)
+                {
+                <div class="btn-sec">
+                    <button onclick="location.href='@Url.Action("ThemGioHang", "ChiTietSach",new {idSach=sach.ID})'" class="btn">Add To cart</button>
+                    <button onclick="location.href='@Url.Action("MuaNgay", "ChiTietSach",new {idSach=sach.ID })'" class="btn black">Buy Now</button>
+                </div>}
+                else
+                {
+                    <div class="btn-sec">
+                        <button disabled class="btn ">Add To cart</button>
+                        <button disabled class="btn black">Buy Now</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="container mt-8">
+        <h4 class="mt-5 mb-2">Thông Tin Chi Tiết</h4>
+        <div class="row">
+            <div class="col-md-8">
+                <table style="border:1px solid #e3e1e1" class="table table-striped">
+                    <tr>
+                        <th>ID</th>
+                        <td>@sach.ID</td>
+                    </tr>
+                    <tr>
+                        <th>Tên Chủ Đề</th>
+                        <td>@sach.ChuDe.Ten</td>
+                    </tr>
+                    <tr>
+                        <th>Tên Nhà Cung Cấp</th>
+                        <td>@sach.NhaCungCap.Ten</td>
+                    </tr>
+                    <tr>
+                        <th>Tác giả</th>
+                        <td>@sach.TacGia.Ten</td>
+                    </tr>
+                    <tr>
+                        <th>NXB</th>
+                        <td>@sach.NhaXuatBan.Ten</td>
+                    </tr>
+                    <tr>
+                        <th>Ngày Xuất Bản</th>
+                        <td>@sach.NamXuatBan</td>
+                    </tr>
+                    <tr>
+                        <th>Trọng Lượng</th>
+                        <td>@sach.TrongLuong</td>
+                    </tr>
+                    <tr>
+                        <th>Kích Thước</th>
+                        <td>@sach.KickThuoc</td>
+                    </tr>
+                    <tr>
+                        <th>Số trang</th>
+                        <td>@sach.SoTrang</td>
+                    </tr>
+                    <tr>
+                        <th>Hình thức</th>
+                        <td>@sach.HinhThuc</td>
+                    </tr>
+                    <tr>
+                        <th>Ngôn ngữ</th>
+                        <td>@sach.NgonNgu</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+        }
+</section>
+<section class="related-books">
+    <div class="container">
+        <h2>You may also like these book</h2>
+        <div class="recomended-sec">
+            <div class="row">
+                @{
+                    var home = new WebApplication23.DAO.HomeDAO();
+                    foreach (var item in home.GetListTop4TacGia(sach.IdTacGia))
+                    {
+                        if (item.ID == sach.ID) { continue; }
+                        <div class="col-lg-3 col-md-6">
+                            <div class="item">
+                                <img style="width: 170px;height: 210px;display: block;margin-left: auto; margin-right: auto;" src="~/UploadedFiles/@item.AnhBia" alt="img">
+                                <h3>@item.Ten</h3>
+                                <h6><span class="price">@item.Gia VNĐ</span> / <a href="#">Buy Now</a></h6>
+                                @if (@item.IdKhuyenMai != 8 && item.KhuyenMai.NgayKT >= DateTime.Today && item.KhuyenMai.NgayBD <= DateTime.Today)
+                                {
+                                    <span class="sale">Sale !</span>
+                                }
+                                <div class="hover">
+                                    <a href="~/ChiTietSach/Index/@item.ID">
+                                        <span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                
+                
+            </div>
+        </div>
+    </div>
+</section>
+

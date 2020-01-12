@@ -1,0 +1,72 @@
+﻿.thongke{
+    margin-top:20px;
+    width:100%;
+    height:80px;
+    background-color:whitesmoke;
+}
+.thongtin{
+    margin-top:20px;
+    background-color:whitesmoke;
+}
+.col-2{
+    font-style:oblique;
+}
+.info-form{
+    padding-left:10px;
+    border-radius:4px;
+    background-color:white;
+    box-shadow:10px 10px 5px 5px grey;
+}
+.info {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+#ho, #email, #ten, #ngaysinh{
+    width:100%;
+    outline:none;
+}
+table, th, td {
+  border:1px solid black;
+  border-collapse:collapse;
+}
+th, td {
+  padding:5px;
+}
+
+table tr:nth-child(even) {
+  background-color: #eee;
+}
+table tr:nth-child(odd) {
+ background-color: #fff;
+}
+table th {
+  text-align:center;
+  background-color: black;
+  color: white;
+}
+#resetBtn{
+    padding:10px;
+}
+#img-book
+{
+width: 80px;
+height: 100px;
+display: block; margin-left: auto; margin-right: auto;
+}
+#img-book1
+{
+width: 80px;
+height: 100px;
+display: block; margin-left: auto; margin-right: auto;
+}
+#mota
+{
+    display:block;
+    height: 100px;
+  overflow-y:auto;
+}
+#example
+{
+    height:auto;
+    table-layout:fixed;
+}

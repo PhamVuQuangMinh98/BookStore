@@ -1,0 +1,250 @@
+﻿
+@model WebApplication23.Models.ChuDe
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<html>
+<head>
+    @*<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>*@
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+        });
+    </script>
+
+    @if (ViewBag.Err != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+        alert("@ViewBag.Err");
+    }
+        </script>
+    }
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+
+    <title></title>
+</head>
+<body>
+    @{
+
+    }
+
+    <div class="container-fluid thongtin">
+        <div class="row">
+            <h3 style="margin-left:10px;">Admin/Chủ Đề</h3>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                @if (Session["UpdateCD"] == null)
+                {
+                    <form method="post" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên chủ đề
+                            </div>
+                            <div class="col-6 ">
+                                @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                                @Html.TextBoxFor(model => model.Ten, new { name = "tenCD", required = "required", @placeholder = "*Tên chủ đề", @id = "email" })
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Xuất xứ
+                            </div>
+                            <div class="col-6">
+                                @*<span><input type="radio" name="gender" checked value="0"> Nam &nbsp;<input type="radio" name="gender" value="1"> Nữ</span>*@
+                                <span>@Html.RadioButtonFor(m => m.XuatXu, "In", new { @checked = "checked" }) Trong nước &nbsp; @Html.RadioButtonFor(m => m.XuatXu, "Out") Nước ngoài</span>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    var a = Session["UpdateCD"] as WebApplication23.Models.ChuDe;
+                    <form method="post" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên chủ đề
+                            </div>
+                            <div class="col-6 ">
+                                @Html.TextBoxFor(model => model.Ten, new { @Value = a.Ten, required = "required", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                            </div>
+                        </div>
+                       
+                        <div class="info row">
+                            <div class="col-2">
+                                Xuất xứ
+                            </div>
+                            <div class="col-6">
+                                @if (a.XuatXu == "In")
+                                {
+                                    <span>@Html.RadioButtonFor(m => m.XuatXu, "In", new { @checked = "checked" }) Trong nước &nbsp; @Html.RadioButtonFor(m => m.XuatXu, "Out") Nước ngoài</span>
+                                }
+                                else
+                                {
+                                    <span>@Html.RadioButtonFor(m => m.XuatXu, "In") Trong nước &nbsp; @Html.RadioButtonFor(m => m.XuatXu, "Out", new { @checked = "checked" }) Nước ngoài</span>
+                                }
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                                    }
+            </div>
+            <div class="col-6">
+                @using (Html.BeginForm("Search", "ChuDe", new { area = "Admin" }, FormMethod.Post, new { @class = "info-form", id = "logoutForm" }))
+                {
+                    <div class="info row">
+                        <div class="col-2">
+                            Tên chủ đề
+                        </div>
+                        <div class="col-6 ">
+                            <input type="text" name="tenCD" id="email" placeholder="*Tên chủ đề" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("TK")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Xuất xứ
+                        </div>
+                        <div class="col-6">
+                            <select name="xuatXu">
+                                <option selected value="0">Tất cả</option>
+                                <option value="In">Trong nước</option>
+                                <option value="Out">Nước ngoài</option>
+                            </select>
+                        </div>
+                        <div class="col-4"></div>
+                    </div>
+                   
+                    <div class="info">
+                        <button style="width:120px;" class="btn btn-warning" type="submit">Tìm Kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "ChuDe",new {Area="Admin"})'">
+                            Reset
+                        </button>
+
+
+                        @*@Html.ActionLink("Reset", "Reset", "KhachHang", new { Area = "Admin" }, new {@id="resetBtn", @type = "button" })*@
+                    </div>}
+
+
+
+
+            </div>
+        </div>
+        <div class="container-fluid mt-4 mb-4">
+
+            <table id="example1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Mã chủ đề</th>
+                        <th>Tên chủ đề</th>
+                        <th>Xuất xứ</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                @{
+                    var db = new WebApplication23.DAO.ChuDeDAO();
+                    var list = Session["ListCD"] as List<WebApplication23.Models.ChuDe>;
+
+
+
+
+
+
+                    if (list == null)
+                    {
+                        <tbody>
+                            @foreach (var item in db.GetList())
+                            {
+
+                            <tr>
+                                <td>@item.IdChuDe</td>
+                                <td>@item.Ten</td>
+                                @if (item.XuatXu == "In")
+                                {
+                                    <td>Trong nước</td>
+                                }
+                                else
+                                {
+                                    <td>Nước ngoài</td>
+                                }
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "ChuDe", new { Area = "Admin", idChuDe = item.IdChuDe }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "ChuDe", new { Area = "Admin", idChuDe = item.IdChuDe }, new { })
+                                </td>
+
+                            </tr>
+
+                            }
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            @foreach (var item in list)
+                            {
+                            <tr>
+                                <td>@item.IdChuDe</td>
+                                <td>@item.Ten</td>
+                                @if (item.XuatXu == "In")
+                                {
+                                    <td>Trong nước</td>
+                                }
+                                else
+                                {
+                                    <td>Nước ngoài</td>
+                                }
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "ChuDe", new { Area = "Admin", idChuDe = item.IdChuDe }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "ChuDe", new { Area = "Admin", idChuDe = item.IdChuDe }, new { })
+                                </td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    }
+                }
+
+            </table>
+
+
+
+
+        </div>
+       
+
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

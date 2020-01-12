@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    var db = new WebApplication23.DAO.ChuDeDAO();
+}
+<style>
+    .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+        }
+
+        .grid-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            font-size: 25px;
+            text-align: center;
+        }
+</style>
+<section class="static about-sec">
+    <div class="container">
+        <h2>Sách trong nước</h2>
+        <div class="grid-container">
+            @{
+                foreach (var item in db.GetListTrongNuoc())
+                {
+                    <div class="grid-item btn-sec"><button style="width:150px;height:80px;" onclick="location.href='@Url.Action("ChuDe", "Category",new {idCD=item.IdChuDe})'" class="btn">@item.Ten</button></div>
+                }
+            }
+        </div>
+        <br>
+        <br>
+        <br>
+        <h2>Sách nước ngoài</h2>
+        <div class="grid-container">
+           @{
+               foreach (var item in db.GetListNgoaiNuoc())
+               {
+                <div class="grid-item btn-sec"><button style="width:150px;height:80px;" onclick="location.href='@Url.Action("ChuDe", "Category",new {idCD=item.IdChuDe})'" @*onclick="location.href='@Url.Action("ThemGioHang", "ChiTietSach",new {idSach=sach.ID})'"*@ class="btn">@item.Ten</button></div>
+               }
+        }
+        </div>
+
+    </div>
+
+</section>
+

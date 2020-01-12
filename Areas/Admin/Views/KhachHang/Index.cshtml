@@ -1,0 +1,447 @@
+﻿@model WebApplication23.Models.KhachHang
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<html>
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+
+        });
+        $(document).ready(function () {
+            $('#table1').DataTable();
+        });
+    </script>
+
+ 
+   
+   
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+   
+    <title></title>
+</head>
+<body>
+    @{
+
+    }
+    <div class="container-fluid thongtin">
+        <div class="row">
+            <h3 style="margin-left:10px;">Admin/Khách Hàng</h3>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                @if (Session["Update"] == null)
+                {
+                    <form method="post" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tài khoản
+                            </div>
+                            <div class="col-6 ">
+                                @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                                @Html.TextBoxFor(model => model.Username, new { name = "email", @type = "email", required = "required", @placeholder = "*Email", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("TK")
+                                </p>
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Họ
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Họ" required id="ho" name="ho" />*@
+                                @Html.TextBoxFor(model => model.Ho, new { name = "ho", required = "required", @placeholder = "*Họ", @id = "ho" })
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Tên" required id="ten"  />*@
+                                @Html.TextBoxFor(model => model.Ten, new { name = "ten", required = "required", @placeholder = "*Tên", @id = "ten" })
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Ngày sinh
+                            </div>
+                            <div class="col-6">
+                                @*<input type="date" required name="ngaysinh" id="ngaysinh"/>*@
+                                @Html.TextBoxFor(model => model.NgaySinh, new { required = "required", name = "ngaysinh", @type = "date", @id = "ngaysinh" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Giới tính
+                            </div>
+                            <div class="col-6">
+                                @*<span><input type="radio" name="gender" checked value="0"> Nam &nbsp;<input type="radio" name="gender" value="1"> Nữ</span>*@
+                                <span>@Html.RadioButtonFor(m => m.GioiTinh, 0, new { @checked = "checked" }) Nam &nbsp; @Html.RadioButtonFor(m => m.GioiTinh, 1) Nữ</span>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    var a = Session["Update"] as WebApplication23.Models.KhachHang;
+                    <form method="post" action="./Index" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tài khoản
+                            </div>
+                            <div class="col-6 ">
+                                @Html.TextBoxFor(model => model.Username, new { @Value = a.Username, @readonly = "readonly", required = "required", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Họ
+                            </div>
+                            <div class="col-6">
+                                @Html.TextBoxFor(model => model.Ho, new { @Value = a.Ho, required = "required", @placeholder = "*Họ", @id = "ho" })
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên
+                            </div>
+                            <div class="col-6">
+                                @Html.TextBoxFor(model => model.Ten, new { @Value = a.Ten, required = "required", @placeholder = "*Tên", @id = "ten" })
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Ngày sinh
+                            </div>
+                            <div class="col-6">
+                                @{
+                                    string dateValue = a.NgaySinh.Year + "-" + a.NgaySinh.Month + "-" + a.NgaySinh.Day;
+                                    if (a.NgaySinh.Month < 10 && a.NgaySinh.Day >= 10)
+                                    {
+                                        dateValue = a.NgaySinh.Year + "-0" + a.NgaySinh.Month + "-" + a.NgaySinh.Day;
+
+                                    }
+                                    else if (a.NgaySinh.Day < 10 && a.NgaySinh.Month >= 10)
+                                    {
+                                        dateValue = a.NgaySinh.Year + "-" + a.NgaySinh.Month + "-0" + a.NgaySinh.Day;
+                                    }
+                                    else if (a.NgaySinh.Month < 10 && a.NgaySinh.Day < 10)
+                                    {
+                                        dateValue = a.NgaySinh.Year + "-0" + a.NgaySinh.Month + "-0" + a.NgaySinh.Day;
+                                    }
+                                }
+
+                                @Html.TextBoxFor(model => model.NgaySinh, new { @Value = dateValue, @type = "date", @id = "ngaysinh", required = "required" })
+
+                            </div>
+                            <div class="col-4">                               
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Giới tính
+                            </div>
+                            <div class="col-6">
+                                @if (a.GioiTinh == false)
+                                {
+                                    <span>@Html.RadioButtonFor(m => m.GioiTinh, true) Nam &nbsp; @Html.RadioButtonFor(m => m.GioiTinh, false, new { @checked = "checked" }) Nữ</span>
+                                }
+                                else
+                                {
+                                    <span>@Html.RadioButtonFor(m => m.GioiTinh, true, new { @checked = "checked" }) Nam &nbsp; @Html.RadioButtonFor(m => m.GioiTinh, false) Nữ</span>
+                                }
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                                    }
+            </div>
+            <div class="col-6">
+@using (Html.BeginForm("Search", "KhachHang", new { area = "Admin" }, FormMethod.Post, new { @class = "info-form", id = "logoutForm" }))
+{
+    <div class="info row">
+        <div class="col-2">
+            Tài khoản
+        </div>
+        <div class="col-6 ">
+            <input type="text" name="email" id="email" placeholder="*Email" />
+        </div>
+        <div class="col-4">
+            <p style="color:red;text-align:center;">
+                @Html.ValidationMessage("TK")
+            </p>
+        </div>
+    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Ngày sinh
+                        </div>
+                        <div class="col-6">
+                            <input type="date" name="ngaySinh" id="ngaySinh" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("NS")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Giới tính
+                        </div>
+                        <div class="col-6">
+                                <select name="gioiTinh">
+                                    <option selected value="0">Tất cả</option>
+                                    <option value="nam">Nam</option>
+                                    <option value="nu">Nữ</option>
+                                </select>                        
+                        </div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="info row">
+                        <div class="col-2">
+                            Trạng thái
+                        </div>
+                        <div class="col-6">
+                            <input type="radio" name="stt" value="block">Khóa &nbsp;
+                            <input type="radio" checked name="stt" value="nor">Không khóa
+                        </div>
+                        <div class="col-4"></div>
+                    </div>
+                    <div class="info">
+                        <button style="width:120px;" class="btn btn-warning" type="submit">Tìm Kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "KhachHang",new {Area="Admin"})'">
+                            Reset
+                        </button>
+                    </div>}             
+            </div>
+        </div>
+        <div class="container-fluid mt-4">
+           
+                <table id="example1" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th width="200px">Tài khoản</th>
+                            <th width="50px">Họ</th>
+                            <th>Tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Giới tính</th>
+                            <th>Loại KH</th>
+                            <th>Điểm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    @{
+                        var db = new WebApplication23.DAO.KhachHangDAO();
+                        var list = Session["ListKH"] as List<WebApplication23.Models.KhachHang>;
+
+
+
+
+
+
+                        if (list == null)
+                        {
+                            <tbody>
+                                @foreach (var item in db.GetList())
+                                {
+
+                                <tr>
+                                    <td>@item.Username</td>
+                                    <td>@item.Ho</td>
+                                    <td>@item.Ten</td>
+                                    <td>@item.NgaySinh.ToShortDateString()</td>
+                                    @if (item.GioiTinh == false)
+                                    {
+                                        <td>Nữ</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Nam</td>
+                                    }
+                                    @if (item.LoaiKH == "BT")
+                                    {
+                                        <td>Thường</td>}
+                                    else
+                                    {
+                                        <td>Thân thiết</td>
+                                    }
+                                    <td>@item.DiemTichLuy</td>
+                                    <td style="text-align:center">
+                                        @Html.ActionLink("Xem", "Update", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })&nbsp;
+                                        @Html.ActionLink("Khóa", "Block", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })
+                                    </td>
+
+                                </tr>
+
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                @foreach (var item in list)
+                                {
+                                <tr>
+                                    <td>@item.Username</td>
+                                    <td>@item.Ho</td>
+                                    <td>@item.Ten</td>
+                                    <td>@item.NgaySinh.ToShortDateString()</td>
+                                    @if (item.GioiTinh == false)
+                                    {
+                                        <td>Nữ</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Nam</td>
+                                    }
+                                    @if (item.LoaiKH == "BT")
+                                    {
+                                        <td>Thường</td>}
+                                    else
+                                    {
+                                        <td>Thân thiết</td>
+                                    }
+                                    <td>@item.DiemTichLuy</td>
+                                    <td style="text-align:center">
+                                        @Html.ActionLink("Xem", "Update", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })&nbsp;
+                                        @Html.ActionLink("Khóa", "Block", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })
+                                    </td>
+
+                                </tr>
+                                }
+                            </tbody>
+                        }
+                    }
+
+                </table>
+               
+
+                
+           
+            </div>
+            <div class="container-fluid mt-4 mb-4">
+                <table id="table1" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th width="200px">Tài khoản</th>
+                            <th width="50px">Họ</th>
+                            <th>Tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Giới tính</th>
+                            <th>Loại KH</th>
+                            <th>Điểm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    @{
+                        var listB = Session["ListBlockKH"] as List<WebApplication23.Models.KhachHang>;
+                        if (listB == null)
+                        {
+
+                            <tbody>
+                                @foreach (var item in db.GetListBlock())
+                                {
+
+                                <tr>
+                                    <td>@item.Username</td>
+                                    <td>@item.Ho</td>
+                                    <td>@item.Ten</td>
+                                    <td>@item.NgaySinh.ToShortDateString()</td>
+                                    @if (item.GioiTinh == false)
+                                    {
+                                        <td>Nữ</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Nam</td>
+                                    }
+                                    @if (item.LoaiKH == "BT")
+                                    {
+                                        <td>Thường</td>}
+                                    else
+                                    {
+                                        <td>Thân thiết</td>
+                                    }
+                                    <td>@item.DiemTichLuy</td>
+                                    <td style="text-align:center">
+                                        @Html.ActionLink("Mở Khóa", "Unblock", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })
+                                    </td>
+                                </tr>
+
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                @foreach (var item in listB)
+                                {
+                                <tr>
+                                    <td>@item.Username</td>
+                                    <td>@item.Ho</td>
+                                    <td>@item.Ten</td>
+                                    <td>@item.NgaySinh.ToShortDateString()</td>
+                                    @if (item.GioiTinh == false)
+                                    {
+                                        <td>Nữ</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Nam</td>
+                                    }
+                                    @if (item.LoaiKH == "BT")
+                                    {
+                                        <td>Thường</td>}
+                                    else
+                                    {
+                                        <td>Thân thiết</td>
+                                    }
+                                    <td>@item.DiemTichLuy</td>
+                                    <td style="text-align:center">
+                                        @Html.ActionLink("Mở Khóa", "Unblock", "KhachHang", new { Area = "Admin", idKhachHang = item.IdKhachHang }, new { })
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        }
+                    }
+
+                </table>
+            </div>
+
+        </div>
+   
+</body>
+</html>
+
+

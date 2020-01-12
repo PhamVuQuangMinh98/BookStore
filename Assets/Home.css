@@ -1,0 +1,82 @@
+﻿body{
+	margin: 0;
+	padding: 0;
+	background: #bec0c2;
+}
+.head-bar{
+	height: 40px;
+	background: red;
+}
+.head-info ul{
+	font-size: 14px;
+	list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.head-info ul li{
+	display: inline;
+}
+.login-info{
+	float: right;
+}
+.search-bar{
+	background: #e1e4e7;
+	border-radius: 5px;
+}
+.search-bar ul{
+	list-style: none;
+}
+.search-bar ul li{
+	display: inline;
+}
+.title-content{
+	margin-top: -3px;
+	background: white;
+}
+.title-content ul{
+	margin-left: -20px;
+	list-style: none;
+}
+.title-content ul li{
+	padding-top: 5px;
+	padding-bottom: 4px;
+	margin-bottom: 20px;
+}
+.footer-head{
+	height: 80px;
+	background: pink;
+}
+.footer-content{
+	background: white;
+}
+.footer-content ul {
+	list-style: none;
+}
+.footer-content ul li {
+	margin-bottom: 10px;
+	border-bottom: 1px solid black;
+}
+.footer-content h5{
+	margin-left: 20px;
+
+}
+#title-cate{
+	font-weight: bold;
+	font-size: 18px;
+	background: grey;
+	padding: 8px;
+}
+#login{
+	padding-left: 10px;
+	border-left: 2px solid grey;
+}
+#createAcc{
+	padding-right: 8px;
+}
+#gmail{
+	padding-right: 8px;
+}
+#sdt{
+	border-left: 2px solid grey;
+	padding-left: 10px;
+}

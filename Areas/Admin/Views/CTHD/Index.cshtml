@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+    <title></title>
+</head>
+
+<div class="container-fluid mt-4 mb-4">
+    <div class="row">
+        <div class="row">
+            <h3 style="margin-left:25px;">Admin/Chi Tiết Hóa Đơn</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            @{ 
+                var idHD = Session["IdHD"] as string;
+                var db = new WebApplication23.Models.ToyContext();
+                var hd = db.HoaDon.Find(Convert.ToInt64(idHD));
+                string dateValue = hd.NgayTao.Year + "-" + hd.NgayTao.Month + "-" + hd.NgayTao.Day;
+                if (hd.NgayTao.Month < 10 && hd.NgayTao.Day >= 10)
+                {
+                    dateValue = hd.NgayTao.Year + "-0" + hd.NgayTao.Month + "-" + hd.NgayTao.Day;
+
+                }
+                else if (hd.NgayTao.Day < 10 && hd.NgayTao.Month >= 10)
+                {
+                    dateValue = hd.NgayTao.Year + "-" + hd.NgayTao.Month + "-0" + hd.NgayTao.Day;
+                }
+                else if (hd.NgayTao.Month < 10 && hd.NgayTao.Day < 10)
+                {
+                    dateValue = hd.NgayTao.Year + "-0" + hd.NgayTao.Month + "-0" + hd.NgayTao.Day;
+                }
+            }
+            <form method="post" style="width:500px;" action="./Search" class="info-form mb-4">
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        Mã Hóa Đơn
+                    </div>
+                    <div class="col-6 ">
+                        @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                        <input type="text" readonly value="@hd.IdHoaDon" />
+                    </div>
+                </div>
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        Ngày
+                    </div>
+                    <div class="col-6">
+                        <input type="date" value="@dateValue" readonly  />
+                    </div>
+                </div>
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        Tên Người Nhận
+                    </div>
+                    <div class="col-6">
+                        <input type="text" readonly value="@hd.TenNguoiNhan" />
+                    </div>
+                </div>
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        Địa Chỉ
+                    </div>
+                    <div class="col-6">
+                        <input type="text" readonly value="@hd.DiaChi" />
+                    </div>
+
+                </div>
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        SĐT
+                    </div>
+                    <div class="col-6">
+                        <input type="text" readonly value="@hd.SDT" />
+                    </div>
+                </div>
+                <div class="info row">
+                    <div style="font-style:oblique" class="col-4">
+                        Tổng Tiền
+                    </div>
+                    <div class="col-6">
+                        <input type="text" readonly value="@hd.TongTien VNĐ" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th class="text-center">Mã</th>
+                <th >Hình Ảnh</th>
+                <th class="text-center">Tên Sách</th>
+                <th class="text-center">Đơn Giá</th>
+                <th class="text-center">Số Lượng</th>
+                <th class="text-center">Thành Tiền</th>
+            </tr>
+        </thead>
+        @{
+
+            var list = Session["ListCTHoaDon"] as List<WebApplication23.Models.ChiTietHoaDon>;
+
+
+
+
+
+
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@item.IdCTHD</td>
+                            <td><img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;" 
+                                     src="~/UploadedFiles/@item.Sach.AnhBia"/></td>
+                            <td class="text-center">@item.Sach.Ten</td>
+                            <td class="text-center">@item.Sach.Gia VNĐ</td>
+                            <td class="text-center">@item.SoLuong</td>
+                            <td class="text-center">@item.ThanhTien VNĐ</td>
+                        </tr>
+                    </tbody>
+                }
+            }
+          
+        }
+
+    </table>
+
+
+
+
+</div>
+

@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+@if (ViewBag.Err != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+        alert("@ViewBag.Err");
+    }
+    </script>
+}
+ <section class="static about-sec">
+    <div class="container">
+        <h1>My Account / Info</h1>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's printer took a galley of type and scrambled it to make a type specimen book. It has survived not only fiveLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem </p>
+        <div class="form">
+            <form method="post" action="~/Account/Index" enctype="multipart/form-data">
+                @{ 
+                    var tk = Session["TaiKhoan"] as WebApplication23.Models.KhachHang;
+                }
+                <div class="row">
+                    <input type="text" hidden value="@tk.IdKhachHang" name="idtaikhoan"/>
+                    <div class="col-md-3">
+                        <input type="email" readonly value="@tk.Username" placeholder="Enter User Name" name="email" required>
+                        <span class="required-star">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="password" placeholder="Password Hiện Tại" name="oldpassword" required>
+                        <span class="required-star">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="password" placeholder="Password Mới" name="newpassword">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="password" placeholder="Nhập Lại Password Mới" name="renewpassword">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" placeholder="Enter Họ" value="@tk.Ho" name="ho" required>
+                        <span class="required-star">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" placeholder="Enter Tên" value="@tk.Ten" name="ten" required>
+                        <span class="required-star">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        @{
+                            string dateValue = tk.NgaySinh.Year + "-" + tk.NgaySinh.Month + "-" + tk.NgaySinh.Day;
+                            if (tk.NgaySinh.Month < 10 && tk.NgaySinh.Day >= 10)
+                            {
+                                dateValue = tk.NgaySinh.Year + "-0" + tk.NgaySinh.Month + "-" + tk.NgaySinh.Day;
+
+                            }
+                            else if (tk.NgaySinh.Day < 10 && tk.NgaySinh.Month >= 10)
+                            {
+                                dateValue = tk.NgaySinh.Year + "-" + tk.NgaySinh.Month + "-0" + tk.NgaySinh.Day;
+                            }
+                            else if (tk.NgaySinh.Month < 10 && tk.NgaySinh.Day < 10)
+                            {
+                                dateValue = tk.NgaySinh.Year + "-0" + tk.NgaySinh.Month + "-0" + tk.NgaySinh.Day;
+                            }
+                        }
+                        <input type="date" name="ngaysinh" value="@dateValue" placeholder="Repeat Password" required>
+                        <span class="required-star">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        @if (tk.GioiTinh == true)
+                        {
+                            <select name="gioitinh">
+                                <option value="0" selected>Nam</option>
+                                <option value="1">Nữ</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select name="gioitinh">
+                                <option value="0">Nam</option>
+                                <option value="1" >Nữ</option>
+                            </select>
+                        }
+                        
+                    </div>
+                    <div class="col-lg-8 col-md-12">
+                        <button type="submit" class="btn black">Save</button>
+                        <h5>  <a href="~/LichSu/Index">Lịch Sử Mua Hàng</a></h5>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

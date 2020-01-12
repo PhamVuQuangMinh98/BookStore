@@ -1,0 +1,236 @@
+﻿@model WebApplication23.Models.NhaCungCap
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<html>
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+        });
+    </script>
+    @if (ViewBag.Err != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        window.onload = function () {
+        alert("@ViewBag.Err");
+    }
+        </script>
+    }
+
+
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+
+    <title></title>
+</head>
+<body>
+    @{
+
+    }
+    <div class="container-fluid thongtin">
+        <div class="row">
+            <h3 style="margin-left:10px;">Admin/Nhà Cung Cấp</h3>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                @if (Session["UpdateNCC"] == null)
+                {
+                    <form method="post" action="./Index" enctype="multipart/form-data" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên NCC
+                            </div>
+                            <div class="col-6 ">
+                                @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                                @Html.TextBoxFor(model => model.Ten, new { name = "tenNCC", required = "required", @placeholder = "*Nhập tên nhà cung cấp", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                                <p style="color:red;text-align:center;">
+                                    @Html.ValidationMessage("TK")
+                                </p>
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Mô tả
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Họ" required id="ho" name="ho" />*@
+                                <textarea name="moTa" rows="5" cols="50"></textarea>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Hình ảnh
+                            </div>
+                            <div class="col-6">
+                                @*<input type="text" placeholder="*Tên" required id="ten"  />*@
+                                <input type="file" name="file" id="file" />
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    var a = Session["UpdateNCC"] as WebApplication23.Models.NhaCungCap;
+                    <form method="post" action="./Index" enctype="multipart/form-data" class="info-form">
+                        <div class="info row">
+                            <div class="col-2">
+                                Tên NCC
+                            </div>
+                            <div class="col-6 ">
+                                @Html.TextBoxFor(model => model.Ten, new { @Value = a.Ten, required = "required", @id = "email" })
+                            </div>
+                            <div class="col-4">
+                            </div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Mô tả
+                            </div>
+                            <div class="col-6">
+                                <textarea rows="5" cols="50" name="moTa">@a.MoTa</textarea>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info row">
+                            <div class="col-2">
+                                Hình ảnh
+                            </div>
+                            <div class="col-6">
+                                <input type="file" id="file" name="file" value="@a.HinhAnh" />
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                        <div class="info">
+                            <button style="width:120px;" class="btn btn-warning" disabled id="btn-create">Thêm mới</button>
+                            <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-update">Sửa đổi</button>
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="col-6">
+                @using (Html.BeginForm("Search", "NhaCungCap", new { area = "Admin" }, FormMethod.Post, new { @class = "info-form", id = "logoutForm" }))
+                {
+                    <div class="info row">
+                        <div class="col-2">
+                            Tên nhà cung cấp
+                        </div>
+                        <div class="col-6 ">
+                            <input type="text" name="tenNCC" id="email" placeholder="*Nhập tên nhà cung cấp" />
+                        </div>
+                        <div class="col-4">
+                            <p style="color:red;text-align:center;">
+                                @Html.ValidationMessage("TK")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <button style="width:120px;" class="btn btn-warning" type="submit">Tìm Kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "NhaCungCap",new {Area="Admin"})'">
+                            Reset
+                        </button>
+                    </div>}
+
+
+
+
+            </div>
+        </div>
+        <div class="container-fluid mt-4 mb-4">
+
+            <table id="example1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Mã NCC</th>
+                        <th>Tên NCC</th>
+                        <th style="width:400px">Mô tả</th>
+                        <th style="width:160px">Hình ảnh</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                @{
+                    var db = new WebApplication23.DAO.NhaCungCapDAO();
+                    var list = Session["ListNCC"] as List<WebApplication23.Models.NhaCungCap>;
+
+
+
+
+
+
+                    if (list == null)
+                    {
+                        <tbody>
+                            @foreach (var item in db.GetList())
+                            {
+
+                            <tr>
+                                <td>@item.IdNCC</td>
+                                <td>@item.Ten</td>
+                                <td><div id="mota">@item.MoTa</div></td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.HinhAnh" alt="image">
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "NhaCungCap", new { Area = "Admin", idNCC = item.IdNCC }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "NhaCungCap", new { Area = "Admin", idNCC = item.IdNCC }, new { })
+                                </td>
+
+                            </tr>
+
+                            }
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            @foreach (var item in list)
+                            {
+                            <tr>
+                                <td>@item.IdNCC</td>
+                                <td>@item.Ten</td>
+                                <td><div id="mota">@item.MoTa</div></td>
+                                <td>
+                                    <img style="width: 80px;height: 100px;display: block; margin-left: auto; margin-right: auto;"
+                                         src="~/UploadedFiles/@item.HinhAnh" alt="image">
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.ActionLink("Xem", "Update", "NhaCungCap", new { Area = "Admin", idNCC = item.IdNCC }, new { })&nbsp;
+                                    @Html.ActionLink("Xóa", "Delete", "NhaCungCap", new { Area = "Admin", idNCC = item.IdNCC }, new { })
+                                </td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    }
+                }
+
+            </table>
+
+
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+

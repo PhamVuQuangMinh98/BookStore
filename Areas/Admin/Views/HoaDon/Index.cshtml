@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<head>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable();
+
+        });
+    </script>
+    <link rel="stylesheet" href="~/Assets/KhachHang.css" />
+    <title></title>
+</head>
+
+<div class="container-fluid mt-4 mb-4">
+    <div class="row">
+        <h3 style="margin-left:10px;">Admin/Hóa Đơn</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+                <form method="post" style="width:400px" action="./Search" class="info-form mb-4">
+                    <div class="info row">
+                        <div style="font-style:oblique" class="col-4">
+                            Ngày
+                        </div>
+                        <div class="col-6 ">
+                            @*<input type="email" placeholder="*Email" required id="email" name="email"/>*@
+                            <input type="date" name="ngay"/>
+                        </div>
+                    </div>
+                    <div class="info row">
+                        <div style="font-style:oblique" class="col-4">
+                            Mã Hóa Đơn
+                        </div>
+                        <div class="col-6">
+                           <input type="number" name="id" placeholder="*Nhập Mã Hóa Đơn"/>
+                        </div>
+     
+                    </div>
+                    <div class="info row">
+                        <div style="font-style:oblique" class="col-4">
+                            Tài Khoản
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="taikhoan" placeholder="*Nhập Tài Khoản" />
+                        </div>
+
+                    </div>
+                    <div class="info">
+                        <button style="width:120px;" class="btn btn-warning" type="submit" id="btn-create">Tìm Kiếm</button>
+                        <button style="width:120px;" class="btn btn-warning" type="button" onclick="location.href='@Url.Action("Reset", "HoaDon",new {Area="Admin"})'">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+                    <table id="example1" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Mã Hóa Đơn</th>
+                                <th>Tài Khoản</th>
+                                <th>Tên</th>
+                                <th>Ngày Tạo</th>
+                                <th>Tổng Tiền</th>
+                                <th>Tình Trạng Đơn Hàng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var db = new WebApplication23.DAO.HoaDonDAO();
+                            var list = Session["ListHoaDon"] as List<WebApplication23.Models.HoaDon>;
+                            if (list != null)
+                            {
+                                <tbody>
+                                    @foreach (var item in list)
+                    {
+                                        <tr>
+                                            <td>@item.IdHoaDon</td>
+                                            <td>@item.KhachHang.Username</td>
+                                            <td>@item.KhachHang.Ten</td>
+                                            <td>@item.NgayTao.ToShortDateString()</td>
+                                            <td>@item.DiaChi</td>
+                                            <td>@item.TinhTrangDonHang</td>
+                                            <td style="text-align:center">
+                                                @Html.ActionLink("Xem", "ChiTietHoaDon", "HoaDon", new { Area = "Admin", idHD = item.IdHoaDon }, new { }) |
+                                                @Html.ActionLink("Đã Giao", "Giao", "HoaDon", new { Area = "Admin", idHD = item.IdHoaDon }, new { }) |
+                                                @Html.ActionLink("Excel", "XuatExcel", "HoaDon", new { Area = "Admin", idHD = item.IdHoaDon }, new { })
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+
+                        }
+
+                    </table>
+
+
+
+
+                </div>
+
